@@ -1,0 +1,37 @@
+.wcwb { max-width: 640px; }
+.wcwb-field { margin: 0 0 1.25em; }
+.wcwb-field label,
+.wcwb-field legend { display: block; font-weight: 600; margin-bottom: .35em; }
+.wcwb-field input[type="text"],
+.wcwb-field input[type="email"],
+.wcwb-field textarea { width: 100%; box-sizing: border-box; }
+.wcwb-field small { display: block; opacity: .8; margin-top: .25em; }
+.wcwb-check { display: block; font-weight: normal !important; }
+.wcwb-hp { position: absolute !important; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+
+.wcwb-button {
+	display: inline-block;
+	padding: .7em 1.4em;
+	background: #1d2327;
+	color: #fff !important;
+	border: 0;
+	border-radius: 4px;
+	font-weight: 600;
+	text-decoration: none !important;
+	cursor: pointer;
+}
+.wcwb-button:hover,
+.wcwb-button:focus { background: #000; }
+.wcwb-button:focus-visible { outline: 3px solid #2271b1; outline-offset: 2px; }
+.wcwb-button-confirm { font-size: 1.1em; }
+.wcwb-link { background: none; border: 0; padding: 0; color: inherit; text-decoration: underline; cursor: pointer; }
+
+.wcwb-errors { border-left: 4px solid #d63638; background: #fcf0f1; padding: .75em 1em; margin-bottom: 1.25em; }
+.wcwb-errors ul { margin: 0; padding-left: 1.2em; }
+.wcwb-success { border-left: 4px solid #00a32a; background: #edfaef; padding: .75em 1em; margin-bottom: 1.25em; }
+.wcwb-summary { width: 100%; border-collapse: collapse; margin-bottom: 1.25em; }
+.wcwb-summary th,
+.wcwb-summary td { text-align: left; vertical-align: top; padding: .5em; border-bottom: 1px solid rgba(0, 0, 0, .1); }
+.wcwb-summary th { width: 40%; }
+
+.wcwb-footer-link { text-align: center; padding: 1em; }
