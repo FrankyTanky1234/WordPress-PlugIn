@@ -315,6 +315,32 @@ class WCWB_Withdrawals {
 	}
 
 	/**
+	 * Kennzeichen von einer Bestellung entfernen, wenn der Widerruf einer anderen Bestellung zugeordnet wird.
+	 *
+	 * @param WC_Order|false $order     Bisher zugeordnete Bestellung.
+	 * @param string         $reference Referenz.
+	 * @param WC_Order       $new_order Neu zugeordnete Bestellung.
+	 */
+	private static function unmark_order( $order, $reference, $new_order ) {
+		if ( ! $order instanceof WC_Order ) {
+			return;
+		}
+		// Nur das eigene Kennzeichen entfernen – ein weiterer Widerruf zur selben Bestellung bleibt bestehen.
+		if ( $order->get_meta( '_wcwb_withdrawn' ) === $reference ) {
+			$order->delete_meta_data( '_wcwb_withdrawn' );
+		}
+		$order->add_order_note(
+			sprintf(
+				/* translators: 1: Referenz, 2: neue Bestellnummer */
+				__( 'Widerruf %1$s betrifft nicht diese Bestellung und wurde der Bestellung #%2$s zugeordnet.', 'widerrufsbutton-woocommerce' ),
+				$reference,
+				$new_order->get_order_number()
+			)
+		);
+		$order->save();
+	}
+
+	/**
 	 * Bestellung nur anhand der angezeigten Bestellnummer suchen (für die manuelle Zuordnung).
 	 *
 	 * @param string $order_number Bestellnummer.
@@ -477,6 +503,9 @@ class WCWB_Withdrawals {
 				break;
 			case 'wcwb_email':
 				echo esc_html( $r['email'] );
+				if ( '0' === (string) get_post_meta( $post_id, '_wcwb_mail_sent', true ) ) {
+					echo '<br><strong style="color:#d63638">' . esc_html__( 'Eingangsbestätigung nicht versendet – bitte manuell bestätigen', 'widerrufsbutton-woocommerce' ) . '</strong>';
+				}
 				break;
 			case 'wcwb_order':
 				echo wp_kses_post( self::order_html( $r ) );
@@ -557,7 +586,7 @@ class WCWB_Withdrawals {
 			__( 'Eingang', 'widerrufsbutton-woocommerce' )            => esc_html( self::format_time( $r['received'] ) ),
 			__( 'Name', 'widerrufsbutton-woocommerce' )               => esc_html( $r['name'] ),
 			__( 'E-Mail', 'widerrufsbutton-woocommerce' )             => '<a href="mailto:' . esc_attr( $r['email'] ) . '">' . esc_html( $r['email'] ) . '</a>',
-			__( 'Angegebene Bestellnummer', 'widerrufsbutton-woocommerce' ) => esc_html( $r['order_number'] ),
+			__( 'Angegebene Bestellnummer / -datum', 'widerrufsbutton-woocommerce' ) => esc_html( $r['order_number'] ),
 			__( 'Zugeordnete Bestellung', 'widerrufsbutton-woocommerce' ) => self::order_html( $r ),
 			__( 'Betroffene Artikel', 'widerrufsbutton-woocommerce' ) => nl2br( esc_html( $r['items'] ? $r['items'] : __( 'Gesamter Vertrag', 'widerrufsbutton-woocommerce' ) ) ),
 			__( 'Nachricht', 'widerrufsbutton-woocommerce' )          => nl2br( esc_html( $r['message'] ? $r['message'] : '–' ) ),
@@ -632,10 +661,18 @@ class WCWB_Withdrawals {
 
 		$assign = isset( $_POST['wcwb_assign_order'] ) ? sanitize_text_field( wp_unslash( $_POST['wcwb_assign_order'] ) ) : '';
 		if ( '' !== $assign ) {
-			$order = self::find_order_by_number( $assign );
-			if ( $order ) {
+			$order     = self::find_order_by_number( $assign );
+			$reference = get_post_meta( $post_id, '_wcwb_reference', true );
+			$previous  = (int) get_post_meta( $post_id, '_wcwb_order_id', true );
+			if ( $order && $order->get_id() === $previous ) {
+				/* translators: %s: Bestellnummer */
+				self::flash( 'success', sprintf( __( 'Der Widerruf ist der Bestellung #%s bereits zugeordnet.', 'widerrufsbutton-woocommerce' ), $order->get_order_number() ) );
+			} elseif ( $order ) {
+				if ( $previous ) {
+					self::unmark_order( wc_get_order( $previous ), $reference, $order );
+				}
 				update_post_meta( $post_id, '_wcwb_order_id', $order->get_id() );
-				self::mark_order( $order, get_post_meta( $post_id, '_wcwb_reference', true ), (int) get_post_meta( $post_id, '_wcwb_received', true ), true );
+				self::mark_order( $order, $reference, (int) get_post_meta( $post_id, '_wcwb_received', true ), true );
 				/* translators: %s: Bestellnummer */
 				self::flash( 'success', sprintf( __( 'Widerruf der Bestellung #%s zugeordnet.', 'widerrufsbutton-woocommerce' ), $order->get_order_number() ) );
 			} else {

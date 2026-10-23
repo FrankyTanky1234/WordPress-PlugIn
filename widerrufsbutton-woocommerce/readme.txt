@@ -2,7 +2,7 @@
 Requires at least: 6.2
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.0.2
+Stable tag: 1.0.3
 License: GPLv2 or later
 
 Elektronische Widerrufsfunktion nach Art. 11a der Verbraucherrechte-Richtlinie (i. d. F. der RL (EU) 2023/2673) bzw. § 356a BGB – gilt ab 19. Juni 2026.
@@ -10,7 +10,7 @@ Elektronische Widerrufsfunktion nach Art. 11a der Verbraucherrechte-Richtlinie (
 == Beschreibung ==
 
 * Button „Vertrag widerrufen“ – dauerhaft im Footer jeder Seite, im Kundenkonto je Bestellung und in den Bestell-E-Mails.
-* Formular mit den gesetzlich vorgesehenen Angaben: Name, Angabe des Vertrags (Bestellnummer, optional einzelne Artikel), E-Mail-Adresse für die Bestätigung. Keine Begründung, kein Login, kein Captcha erforderlich.
+* Formular mit den gesetzlich vorgesehenen Angaben: Name, Angabe des Vertrags (Bestellnummer oder Bestelldatum, optional einzelne Artikel), E-Mail-Adresse für die Bestätigung. Keine Begründung, kein Login, kein Captcha erforderlich.
 * Zweiter Schritt mit Zusammenfassung und Bestätigungsfunktion „Widerruf bestätigen“.
 * Sofortige Eingangsbestätigung per E-Mail (dauerhafter Datenträger) mit Inhalt des Widerrufs sowie Datum und Uhrzeit des Eingangs.
 * Speicherung aller Widerrufe unter WooCommerce → Widerrufe, Benachrichtigung an den Shop, automatische Zuordnung zur Bestellung (Bestellnotiz).
@@ -21,7 +21,7 @@ Elektronische Widerrufsfunktion nach Art. 11a der Verbraucherrechte-Richtlinie (
 
 1. Ordner `widerrufsbutton-woocommerce` nach `wp-content/plugins/` hochladen (oder ZIP über Plugins → Installieren → Plugin hochladen).
 2. Aktivieren. Die Seite „Vertrag widerrufen“ mit dem Shortcode `[widerrufsformular]` wird automatisch angelegt.
-3. Unter WooCommerce → Widerrufsbutton die Einstellungen prüfen.
+3. Unter WooCommerce → Widerrufe → Einstellungen die Einstellungen prüfen.
 4. Widerrufsbelehrung in den AGB/Rechtstexten um den Hinweis auf die Widerrufsfunktion ergänzen.
 
 == Hinweise ==
@@ -41,6 +41,13 @@ Elektronische Widerrufsfunktion nach Art. 11a der Verbraucherrechte-Richtlinie (
 
 == Changelog ==
 
+= 1.0.3 =
+* Korrektur: Wird ein Widerruf manuell einer anderen Bestellung zugeordnet, wird die Markierung der bisherigen Bestellung entfernt (Button im Kundenkonto wieder sichtbar) und dort eine Notiz hinterlegt.
+* Korrektur: Erneutes Zuordnen derselben Bestellung erzeugt keine doppelte Bestellnotiz mehr.
+* Feld heißt jetzt „Bestellnummer oder Bestelldatum“; Hinweis in der Shop-Benachrichtigung entsprechend angepasst.
+* Fehlgeschlagene Eingangsbestätigung wird auch in der Übersicht unter WooCommerce → Widerrufe angezeigt.
+* readme: Menüpfad zu den Einstellungen aktualisiert.
+
 = 1.0.2 =
 * Neu: Status pro Widerruf (Neu, In Bearbeitung, Erledigt) inkl. Filter in der Übersicht.
 * Neu: Widerruf nachträglich manuell einer Bestellung zuordnen (mit Bestellnotiz).
@@ -54,6 +61,7 @@ Elektronische Widerrufsfunktion nach Art. 11a der Verbraucherrechte-Richtlinie (
 * Schlägt die Eingangsbestätigung per E-Mail fehl, wird der Kunde darauf hingewiesen und der Shop gewarnt.
 * Footer-Button auf Mobilgeräten nicht mehr von fixierten Fußleisten (z. B. Storefront) verdeckt.
 * Übersetzungen werden erst bei „init“ geladen (WordPress 6.7+).
+* Kleinere Korrekturen (Token-Prüfung, Hinweistext zur Bestellnummer).
 
 = 1.0.0 =
 * Erste Version.

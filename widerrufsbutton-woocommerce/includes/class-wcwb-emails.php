@@ -67,7 +67,7 @@ class WCWB_Emails {
 
 		$body = self::table( $r );
 		if ( ! $r['order_id'] ) {
-			$body .= '<p><strong>' . esc_html__( 'Die Angaben konnten keiner Bestellung automatisch zugeordnet werden (Bestellnummer und E-Mail-Adresse passen nicht zusammen). Bitte manuell prüfen.', 'widerrufsbutton-woocommerce' ) . '</strong></p>';
+			$body .= '<p><strong>' . esc_html__( 'Die Angaben konnten keiner Bestellung automatisch zugeordnet werden (z. B. Bestelldatum statt Bestellnummer angegeben, oder Bestellnummer und E-Mail-Adresse passen nicht zusammen). Bitte manuell prüfen und unter WooCommerce → Widerrufe zuordnen.', 'widerrufsbutton-woocommerce' ) . '</strong></p>';
 		}
 		if ( isset( $r['mail_sent'] ) && ! $r['mail_sent'] ) {
 			$body .= '<p><strong style="color:#d63638">' . esc_html__( 'ACHTUNG: Die Eingangsbestätigung an den Kunden konnte NICHT versendet werden. Bitte die Bestätigung umgehend manuell per E-Mail schicken (Inhalt und Eingangszeit siehe oben).', 'widerrufsbutton-woocommerce' ) . '</strong></p>';
@@ -88,7 +88,7 @@ class WCWB_Emails {
 			__( 'Referenz', 'widerrufsbutton-woocommerce' )        => $r['reference'],
 			__( 'Eingang', 'widerrufsbutton-woocommerce' )         => WCWB_Withdrawals::format_time( $r['received'] ),
 			__( 'Name', 'widerrufsbutton-woocommerce' )            => $r['name'],
-			__( 'Bestellnummer', 'widerrufsbutton-woocommerce' )   => $r['order_number'],
+			__( 'Bestellnummer / Bestelldatum', 'widerrufsbutton-woocommerce' ) => $r['order_number'],
 			__( 'E-Mail-Adresse', 'widerrufsbutton-woocommerce' )  => $r['email'],
 			__( 'Widerrufen wird', 'widerrufsbutton-woocommerce' ) => $r['items'] ? $r['items'] : __( 'der gesamte Vertrag', 'widerrufsbutton-woocommerce' ),
 			__( 'Nachricht', 'widerrufsbutton-woocommerce' )       => $r['message'] ? $r['message'] : '–',

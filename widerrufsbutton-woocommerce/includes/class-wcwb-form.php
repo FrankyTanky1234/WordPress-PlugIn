@@ -68,7 +68,7 @@ class WCWB_Form {
 			$errors[] = __( 'Bitte geben Sie Ihren Namen an.', 'widerrufsbutton-woocommerce' );
 		}
 		if ( '' === $data['order_number'] ) {
-			$errors[] = __( 'Bitte geben Sie die Bestellnummer an, damit wir den Vertrag zuordnen können.', 'widerrufsbutton-woocommerce' );
+			$errors[] = __( 'Bitte geben Sie die Bestellnummer oder das Bestelldatum an, damit wir den Vertrag zuordnen können.', 'widerrufsbutton-woocommerce' );
 		}
 		if ( ! is_email( $data['email'] ) ) {
 			$errors[] = __( 'Bitte geben Sie eine gültige E-Mail-Adresse an – an diese senden wir die Eingangsbestätigung.', 'widerrufsbutton-woocommerce' );
@@ -300,7 +300,7 @@ class WCWB_Form {
 	private static function render_form( array $d ) {
 		$order_items = isset( $d['order_items'] ) ? $d['order_items'] : array();
 		?>
-		<p><?php esc_html_e( 'Hier können Sie Ihren Vertrag elektronisch widerrufen. Bitte geben Sie Ihren Namen, die Bestellnummer und Ihre E-Mail-Adresse an. Eine Begründung ist nicht erforderlich. Nach dem Absenden erhalten Sie umgehend eine Eingangsbestätigung per E-Mail.', 'widerrufsbutton-woocommerce' ); ?></p>
+		<p><?php esc_html_e( 'Hier können Sie Ihren Vertrag elektronisch widerrufen. Bitte geben Sie Ihren Namen, die Bestellnummer (oder das Bestelldatum) und Ihre E-Mail-Adresse an. Eine Begründung ist nicht erforderlich. Nach dem Absenden erhalten Sie umgehend eine Eingangsbestätigung per E-Mail.', 'widerrufsbutton-woocommerce' ); ?></p>
 		<?php self::render_errors(); ?>
 		<form class="wcwb-form" method="post" action="<?php echo esc_url( self::current_url() ); ?>" novalidate>
 			<input type="hidden" name="wcwb_step" value="review">
@@ -310,7 +310,7 @@ class WCWB_Form {
 				<input type="text" id="wcwb_name" name="wcwb_name" value="<?php echo esc_attr( $d['name'] ); ?>" autocomplete="name" required>
 			</p>
 			<p class="wcwb-field">
-				<label for="wcwb_order_number"><?php esc_html_e( 'Bestellnummer', 'widerrufsbutton-woocommerce' ); ?> <span aria-hidden="true">*</span></label>
+				<label for="wcwb_order_number"><?php esc_html_e( 'Bestellnummer oder Bestelldatum', 'widerrufsbutton-woocommerce' ); ?> <span aria-hidden="true">*</span></label>
 				<input type="text" id="wcwb_order_number" name="wcwb_order_number" value="<?php echo esc_attr( $d['order_number'] ); ?>" required>
 				<small><?php esc_html_e( 'Sie finden die Bestellnummer in Ihrer Bestellbestätigung. Haben Sie sie nicht zur Hand, geben Sie stattdessen das Bestelldatum an.', 'widerrufsbutton-woocommerce' ); ?></small>
 			</p>
@@ -437,7 +437,7 @@ class WCWB_Form {
 			$rows[ __( 'Eingang', 'widerrufsbutton-woocommerce' ) ]            = WCWB_Withdrawals::format_time( $d['received'] );
 		}
 		$rows[ __( 'Name', 'widerrufsbutton-woocommerce' ) ]                  = $d['name'];
-		$rows[ __( 'Bestellnummer', 'widerrufsbutton-woocommerce' ) ]         = $d['order_number'];
+		$rows[ __( 'Bestellnummer / Bestelldatum', 'widerrufsbutton-woocommerce' ) ] = $d['order_number'];
 		$rows[ __( 'E-Mail-Adresse', 'widerrufsbutton-woocommerce' ) ]        = $d['email'];
 		$rows[ __( 'Widerrufen wird', 'widerrufsbutton-woocommerce' ) ]       = $d['items'] ? $d['items'] : __( 'der gesamte Vertrag', 'widerrufsbutton-woocommerce' );
 		if ( $d['message'] ) {
