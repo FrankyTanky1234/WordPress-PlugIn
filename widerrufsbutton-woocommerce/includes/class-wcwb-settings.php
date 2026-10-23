@@ -54,8 +54,8 @@ class WCWB_Settings {
 	public static function add_menu() {
 		add_submenu_page(
 			'woocommerce',
-			__( 'Widerrufsbutton', 'widerrufsbutton-woocommerce' ),
-			__( 'Widerrufsbutton', 'widerrufsbutton-woocommerce' ),
+			__( 'Widerrufsbutton – Einstellungen', 'widerrufsbutton-woocommerce' ),
+			'↳ ' . __( 'Einstellungen', 'widerrufsbutton-woocommerce' ),
 			'manage_woocommerce',
 			'wcwb-settings',
 			array( __CLASS__, 'render_page' )

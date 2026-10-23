@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       Widerrufsbutton für WooCommerce
  * Description:       Elektronische Widerrufsfunktion („Vertrag widerrufen“ / „Widerruf bestätigen“) nach Art. 11a RL 2011/83/EU i. d. F. der RL (EU) 2023/2673 bzw. § 356a BGB – inkl. Eingangsbestätigung per E-Mail.
- * Version:           1.0.1
+ * Version:           1.0.2
  * Requires at least: 6.2
  * Requires PHP:      7.4
  * Requires Plugins:  woocommerce
@@ -19,7 +19,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'WCWB_VERSION', '1.0.1' );
+define( 'WCWB_VERSION', '1.0.2' );
 define( 'WCWB_FILE', __FILE__ );
 define( 'WCWB_DIR', plugin_dir_path( __FILE__ ) );
 define( 'WCWB_URL', plugin_dir_url( __FILE__ ) );

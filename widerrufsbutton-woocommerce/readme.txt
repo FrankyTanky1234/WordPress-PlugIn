@@ -2,7 +2,7 @@
 Requires at least: 6.2
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.0.1
+Stable tag: 1.0.2
 License: GPLv2 or later
 
 Elektronische Widerrufsfunktion nach Art. 11a der Verbraucherrechte-Richtlinie (i. d. F. der RL (EU) 2023/2673) bzw. § 356a BGB – gilt ab 19. Juni 2026.
@@ -14,6 +14,7 @@ Elektronische Widerrufsfunktion nach Art. 11a der Verbraucherrechte-Richtlinie (
 * Zweiter Schritt mit Zusammenfassung und Bestätigungsfunktion „Widerruf bestätigen“.
 * Sofortige Eingangsbestätigung per E-Mail (dauerhafter Datenträger) mit Inhalt des Widerrufs sowie Datum und Uhrzeit des Eingangs.
 * Speicherung aller Widerrufe unter WooCommerce → Widerrufe, Benachrichtigung an den Shop, automatische Zuordnung zur Bestellung (Bestellnotiz).
+* Bearbeitung im Backend: Status (Neu / In Bearbeitung / Erledigt) mit Filter, manuelle Zuordnung zu einer Bestellung, interne Notiz. Zähler für neue Widerrufe im Menü.
 * HPOS-kompatibel.
 
 == Installation ==
@@ -39,6 +40,13 @@ Elektronische Widerrufsfunktion nach Art. 11a der Verbraucherrechte-Richtlinie (
 * `wcwb_rate_limit` (filter) – max. Widerrufe pro IP und Stunde (Standard 10).
 
 == Changelog ==
+
+= 1.0.2 =
+* Neu: Status pro Widerruf (Neu, In Bearbeitung, Erledigt) inkl. Filter in der Übersicht.
+* Neu: Widerruf nachträglich manuell einer Bestellung zuordnen (mit Bestellnotiz).
+* Neu: Interne Notiz pro Widerruf.
+* Neu: Zähler neuer Widerrufe im Menü.
+* Menü: „Einstellungen“ steht jetzt direkt unter „Widerrufe“.
 
 = 1.0.1 =
 * Bestellzuordnung funktioniert jetzt auch mit Nummerierungs-Plugins (Suche über E-Mail-Adresse + angezeigte Bestellnummer).
