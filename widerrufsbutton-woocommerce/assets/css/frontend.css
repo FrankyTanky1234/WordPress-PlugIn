@@ -35,3 +35,7 @@
 .wcwb-summary th { width: 40%; }
 
 .wcwb-footer-link { text-align: center; padding: 1em; }
+/* Platz für fixierte Fußleisten auf Mobilgeräten (z. B. Storefront „Mein Konto / Suche / Warenkorb“). */
+@media (max-width: 767px) {
+	.wcwb-footer-link { padding-bottom: 5.5em; }
+}

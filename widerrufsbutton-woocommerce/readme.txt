@@ -1,8 +1,8 @@
 === Widerrufsbutton für WooCommerce ===
 Requires at least: 6.2
-Tested up to: 6.8
+Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 License: GPLv2 or later
 
 Elektronische Widerrufsfunktion nach Art. 11a der Verbraucherrechte-Richtlinie (i. d. F. der RL (EU) 2023/2673) bzw. § 356a BGB – gilt ab 19. Juni 2026.
@@ -39,6 +39,13 @@ Elektronische Widerrufsfunktion nach Art. 11a der Verbraucherrechte-Richtlinie (
 * `wcwb_rate_limit` (filter) – max. Widerrufe pro IP und Stunde (Standard 10).
 
 == Changelog ==
+
+= 1.0.1 =
+* Bestellzuordnung funktioniert jetzt auch mit Nummerierungs-Plugins (Suche über E-Mail-Adresse + angezeigte Bestellnummer).
+* Honeypot-Spamschutz greift jetzt auch beim Bestätigen.
+* Schlägt die Eingangsbestätigung per E-Mail fehl, wird der Kunde darauf hingewiesen und der Shop gewarnt.
+* Footer-Button auf Mobilgeräten nicht mehr von fixierten Fußleisten (z. B. Storefront) verdeckt.
+* Übersetzungen werden erst bei „init“ geladen (WordPress 6.7+).
 
 = 1.0.0 =
 * Erste Version.

@@ -35,7 +35,12 @@ final class WCWB_Plugin {
 	 * Konstruktor.
 	 */
 	private function __construct() {
-		load_plugin_textdomain( 'widerrufsbutton-woocommerce', false, dirname( plugin_basename( WCWB_FILE ) ) . '/languages' );
+		add_action(
+			'init',
+			function () {
+				load_plugin_textdomain( 'widerrufsbutton-woocommerce', false, dirname( plugin_basename( WCWB_FILE ) ) . '/languages' );
+			}
+		);
 
 		if ( ! class_exists( 'WooCommerce' ) ) {
 			add_action( 'admin_notices', array( $this, 'notice_missing_woocommerce' ) );

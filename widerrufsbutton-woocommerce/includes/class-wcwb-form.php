@@ -113,7 +113,7 @@ class WCWB_Form {
 		}
 
 		// Doppelte Übermittlung (Doppelklick, Reload) abfangen.
-		$token    = isset( $_POST['wcwb_token'] ) ? preg_replace( '/[^a-zA-Z0-9]/', '', wp_unslash( $_POST['wcwb_token'] ) ) : '';
+		$token    = isset( $_POST['wcwb_token'] ) && is_string( $_POST['wcwb_token'] ) ? preg_replace( '/[^a-zA-Z0-9]/', '', wp_unslash( $_POST['wcwb_token'] ) ) : '';
 		$existing = $token ? get_transient( 'wcwb_tok_' . $token ) : false;
 		if ( $existing ) {
 			self::redirect_done( (int) $existing );
@@ -134,7 +134,8 @@ class WCWB_Form {
 			set_transient( 'wcwb_tok_' . $token, $record['id'], DAY_IN_SECONDS );
 		}
 
-		WCWB_Emails::send_confirmation( $record );
+		$record['mail_sent'] = WCWB_Emails::send_confirmation( $record ) ? 1 : 0;
+		update_post_meta( $record['id'], '_wcwb_mail_sent', $record['mail_sent'] );
 		WCWB_Emails::send_admin_notification( $record );
 
 		self::redirect_done( $record['id'] );
@@ -311,7 +312,7 @@ class WCWB_Form {
 			<p class="wcwb-field">
 				<label for="wcwb_order_number"><?php esc_html_e( 'Bestellnummer', 'widerrufsbutton-woocommerce' ); ?> <span aria-hidden="true">*</span></label>
 				<input type="text" id="wcwb_order_number" name="wcwb_order_number" value="<?php echo esc_attr( $d['order_number'] ); ?>" required>
-				<small><?php esc_html_e( 'Sie finden die Bestellnummer in Ihrer Bestellbestätigung.', 'widerrufsbutton-woocommerce' ); ?></small>
+				<small><?php esc_html_e( 'Sie finden die Bestellnummer in Ihrer Bestellbestätigung. Haben Sie sie nicht zur Hand, geben Sie stattdessen das Bestelldatum an.', 'widerrufsbutton-woocommerce' ); ?></small>
 			</p>
 			<p class="wcwb-field">
 				<label for="wcwb_email"><?php esc_html_e( 'E-Mail-Adresse für die Eingangsbestätigung', 'widerrufsbutton-woocommerce' ); ?> <span aria-hidden="true">*</span></label>
@@ -360,6 +361,9 @@ class WCWB_Form {
 			'wcwb_items'        => $d['items'],
 			'wcwb_message'      => $d['message'],
 		);
+		// Honeypot-Wert in Schritt 2 mitführen, damit die Spam-Prüfung beim Bestätigen greift.
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing
+		$honeypot = isset( $_POST['wcwb_website'] ) && is_string( $_POST['wcwb_website'] ) ? sanitize_text_field( wp_unslash( $_POST['wcwb_website'] ) ) : '';
 		?>
 		<h2><?php esc_html_e( 'Bitte prüfen Sie Ihre Angaben', 'widerrufsbutton-woocommerce' ); ?></h2>
 		<?php self::render_errors(); ?>
@@ -370,6 +374,7 @@ class WCWB_Form {
 			<input type="hidden" name="wcwb_step" value="confirm">
 			<input type="hidden" name="wcwb_token" value="<?php echo esc_attr( wp_generate_password( 20, false ) ); ?>">
 			<?php wp_nonce_field( self::NONCE, '_wcwb_nonce' ); ?>
+			<input type="hidden" name="wcwb_website" value="<?php echo esc_attr( $honeypot ); ?>">
 			<?php foreach ( $fields as $name => $value ) : ?>
 				<input type="hidden" name="<?php echo esc_attr( $name ); ?>" value="<?php echo esc_attr( $value ); ?>">
 			<?php endforeach; ?>
@@ -399,11 +404,19 @@ class WCWB_Form {
 			<h2><?php esc_html_e( 'Ihr Widerruf ist bei uns eingegangen', 'widerrufsbutton-woocommerce' ); ?></h2>
 			<p>
 				<?php
-				printf(
-					/* translators: 1: E-Mail-Adresse */
-					esc_html__( 'Eine Eingangsbestätigung mit dem Inhalt Ihres Widerrufs sowie Datum und Uhrzeit des Eingangs wurde an %1$s gesendet.', 'widerrufsbutton-woocommerce' ),
-					'<strong>' . esc_html( $r['email'] ) . '</strong>'
-				);
+				if ( '0' === (string) get_post_meta( $r['id'], '_wcwb_mail_sent', true ) ) {
+					printf(
+						/* translators: 1: E-Mail-Adresse */
+						esc_html__( 'Die Eingangsbestätigung per E-Mail an %1$s konnte leider nicht versendet werden. Ihr Widerruf ist trotzdem gespeichert. Bitte speichern oder drucken Sie diese Seite als Nachweis – wir melden uns bei Ihnen.', 'widerrufsbutton-woocommerce' ),
+						'<strong>' . esc_html( $r['email'] ) . '</strong>'
+					);
+				} else {
+					printf(
+						/* translators: 1: E-Mail-Adresse */
+						esc_html__( 'Eine Eingangsbestätigung mit dem Inhalt Ihres Widerrufs sowie Datum und Uhrzeit des Eingangs wurde an %1$s gesendet.', 'widerrufsbutton-woocommerce' ),
+						'<strong>' . esc_html( $r['email'] ) . '</strong>'
+					);
+				}
 				?>
 			</p>
 		</div>

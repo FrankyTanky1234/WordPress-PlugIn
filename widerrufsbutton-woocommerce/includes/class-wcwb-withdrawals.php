@@ -173,6 +173,23 @@ class WCWB_Withdrawals {
 			}
 		}
 
+		// Unabhängig von Nummerierungs-Plugins (z. B. „Sequential Order Numbers“):
+		// Bestellungen zur E-Mail-Adresse laden und über die angezeigte Nummer abgleichen.
+		if ( is_email( $email ) ) {
+			$by_email = wc_get_orders(
+				array(
+					'billing_email' => $email,
+					'limit'         => 100,
+					'orderby'       => 'date',
+					'order'         => 'DESC',
+					'type'          => 'shop_order',
+				)
+			);
+			if ( is_array( $by_email ) ) {
+				$candidates = array_merge( $candidates, $by_email );
+			}
+		}
+
 		/**
 		 * Erlaubt Plugins für eigene Bestellnummern (z. B. „Sequential Order Numbers“),
 		 * die Bestellung zu einer Nummer zu liefern.

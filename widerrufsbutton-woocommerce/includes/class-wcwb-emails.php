@@ -69,6 +69,9 @@ class WCWB_Emails {
 		if ( ! $r['order_id'] ) {
 			$body .= '<p><strong>' . esc_html__( 'Die Angaben konnten keiner Bestellung automatisch zugeordnet werden (Bestellnummer und E-Mail-Adresse passen nicht zusammen). Bitte manuell prüfen.', 'widerrufsbutton-woocommerce' ) . '</strong></p>';
 		}
+		if ( isset( $r['mail_sent'] ) && ! $r['mail_sent'] ) {
+			$body .= '<p><strong style="color:#d63638">' . esc_html__( 'ACHTUNG: Die Eingangsbestätigung an den Kunden konnte NICHT versendet werden. Bitte die Bestätigung umgehend manuell per E-Mail schicken (Inhalt und Eingangszeit siehe oben).', 'widerrufsbutton-woocommerce' ) . '</strong></p>';
+		}
 		$body .= '<p><a href="' . esc_url( admin_url( 'post.php?post=' . (int) $r['id'] . '&action=edit' ) ) . '">' . esc_html__( 'Widerruf im Backend ansehen', 'widerrufsbutton-woocommerce' ) . '</a></p>';
 
 		return self::send( $to, $subject, $heading, $body, $r['email'] );
